@@ -1,4 +1,3 @@
-import { parseRouteSignature, RestController } from '@matchmakerjs/matchmaker';
 import * as ts from "typescript";
 import { OpenApiContentFactory } from './factory/openapi-content-factory';
 import { OpenApiSchemaFactory } from './factory/openapi-schema-factory';
@@ -7,6 +6,8 @@ import { getEnpoints } from './parser/api/endpoint-parser';
 import { parseQueryParameters } from './parser/api/query-parser';
 import { getDecorators, MatchedDecorator } from './parser/decorator-parser';
 import { getClasses } from './parser/file-parser';
+import {parseRouteSignature} from "./factory/router-factory";
+import {Controller} from "./annotations";
 
 export function exportOpenApiDoc(entryPoint: string): Api {
     const program = ts.createProgram([entryPoint], {});
@@ -43,7 +44,7 @@ function getPaths(program: ts.Program, schemaFactory: OpenApiSchemaFactory, cont
             if (!c.getSourceFile() || c.getSourceFile().isDeclarationFile) {
                 return;
             }
-            const matched = getDecorators(c, RestController.name);
+            const matched = getDecorators(c, Controller);
             if (!matched?.length) {
                 return;
             }
@@ -112,3 +113,5 @@ function getPaths(program: ts.Program, schemaFactory: OpenApiSchemaFactory, cont
     });
     return paths;
 }
+
+

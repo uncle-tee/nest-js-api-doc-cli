@@ -1,8 +1,8 @@
-import { Delete, Get, Head, Patch, Post, Put } from "@matchmakerjs/matchmaker";
 import * as ts from "typescript";
 import { MatchedDecorator } from "../decorator-parser";
 import { getPayloadType } from "./payload-type";
 import { getReturnType } from "../return-type";
+import {Delete, Get, Head, Patch, Post, Put} from "../../annotations";
 
 export interface Endpoint {
     declaration: ts.MethodDeclaration,
@@ -61,8 +61,10 @@ function getRouteDoc(controllerPath: string[], methodDeclaration: ts.MethodDecla
                 }
 
                 const method = (<ts.Identifier>it).text;
+                console.log(`${method} is ${Get} and ${[Get, Head, Delete].includes(method)}`)
 
-                if ([Get.name, Head.name, Delete.name].includes(method)) {
+                if ([Get, Head, Delete].includes(method)) {
+                    console.log('We are creating this')
                     routeDoc = {
                         declaration: methodDeclaration,
                         methods: [method.toLowerCase()],
@@ -71,7 +73,7 @@ function getRouteDoc(controllerPath: string[], methodDeclaration: ts.MethodDecla
                         response: getReturnType(methodDeclaration)
                     };
                 }
-                if ([Post.name, Put.name, Patch.name].includes(method)) {
+                if ([Post, Put, Patch].includes(method)) {
                     routeDoc = {
                         declaration: methodDeclaration,
                         methods: [method.toLowerCase()],

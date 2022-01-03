@@ -1,5 +1,6 @@
-import { RequestBody } from "@matchmakerjs/matchmaker";
 import * as ts from "typescript";
+import {Body} from "../../annotations";
+
 
 export function getPayloadType(methodDeclaration: ts.MethodDeclaration): ts.Node {
     const payloadParams = methodDeclaration.parameters.filter(param => {
@@ -13,7 +14,7 @@ export function getPayloadType(methodDeclaration: ts.MethodDeclaration): ts.Node
                     if (it.kind !== ts.SyntaxKind.Identifier) {
                         return;
                     }
-                    if ((<ts.Identifier>it).text === RequestBody.name) {
+                    if ((<ts.Identifier>it).text === Body) {
                         val = true;
                     }
                 });
