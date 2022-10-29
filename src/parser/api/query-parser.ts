@@ -1,14 +1,14 @@
-import { Query, QueryParameter } from "@matchmakerjs/matchmaker";
 import * as ts from "typescript";
 import { OpenApiSchemaFactory } from "../../factory/openapi-schema-factory";
 import { ArraySchema, ObjectSchema, Parameter, Schema } from "../../model/openapi";
 import { getDecorators } from "../decorator-parser";
+import {Param, Query} from "../../annotations";
 
 export function parseQueryParameters(schemaFactory: OpenApiSchemaFactory, methodDeclaration: ts.MethodDeclaration): Parameter[] {
     const parameters: Parameter[] = [];
 
     methodDeclaration.parameters.forEach(parameter => {
-        let matched = getDecorators(parameter, QueryParameter.name);
+        let matched = getDecorators(parameter, Param);
         if (matched.length) {
             let paramName: string;
             let schema: Schema;
@@ -50,7 +50,7 @@ export function parseQueryParameters(schemaFactory: OpenApiSchemaFactory, method
             return parameters;
         }
 
-        matched = getDecorators(parameter, Query.name);
+        matched = getDecorators(parameter, Query);
         if (matched.length) {
 
             let id: ts.Identifier;
